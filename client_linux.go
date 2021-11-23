@@ -14,6 +14,12 @@ import (
 	"image"
 )
 
+// ErrOpenDiaplay can not open display
+var ErrOpenDiaplay = errors.New("can not open display")
+
+// ErrGetWindow can not get root window
+var ErrGetWindow = errors.New("can not get root window")
+
 // ErrGetImage can not get image
 var ErrGetImage = errors.New("can not get image")
 
@@ -22,9 +28,16 @@ type osBase struct {
 	window  C.Window
 }
 
-func (cli *osBase) init() {
+func (cli *osBase) init() error {
 	cli.display = C.XOpenDisplay(nil)
+	if cli.display == nil {
+		return ErrOpenDiaplay
+	}
 	cli.window = C.XDefaultRootWindow(cli.display)
+	if cli.window == 0 {
+		return ErrGetWindow
+	}
+	return nil
 }
 
 // Close close client

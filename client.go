@@ -13,12 +13,15 @@ type Client struct {
 }
 
 // New create client
-func New() *Client {
+func New() (*Client, error) {
 	cli := &Client{}
-	cli.init()
+	err := cli.init()
+	if err != nil {
+		return nil, err
+	}
 	size := cli.size()
 	cli.resize(size)
-	return cli
+	return cli, nil
 }
 
 // Screenshot screenshot

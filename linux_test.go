@@ -7,7 +7,10 @@ import (
 )
 
 func TestLinux(t *testing.T) {
-	cli := New()
+	cli, err := New()
+	if err != nil {
+		t.Fatal(err)
+	}
 	defer cli.Close()
 	img, err := cli.Screenshot()
 	if err != nil {
