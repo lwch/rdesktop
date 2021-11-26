@@ -12,6 +12,8 @@ import "C"
 import (
 	"errors"
 	"image"
+
+	"github.com/lwch/screenshot/x11"
 )
 
 // ErrOpenDiaplay can not open display
@@ -26,6 +28,7 @@ var ErrGetImage = errors.New("can not get image")
 type osBase struct {
 	display *C.Display
 	window  C.Window
+	cli     *x11.Client
 }
 
 func (cli *osBase) init() error {
@@ -36,6 +39,11 @@ func (cli *osBase) init() error {
 	cli.window = C.XDefaultRootWindow(cli.display)
 	if cli.window == 0 {
 		return ErrGetWindow
+	}
+	var err error
+	cli.cli, err = x11.New()
+	if err != nil {
+		return err
 	}
 	return nil
 }
