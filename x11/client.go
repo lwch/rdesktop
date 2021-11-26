@@ -142,7 +142,7 @@ func (cli *Client) waitHandshake() error {
 		return fmt.Errorf("handshake failed: %s", string(buf))
 	case 2: // authenticate
 		l := binary.BigEndian.Uint16(hdr[6:])
-		buf := make([]byte, l)
+		buf := make([]byte, l*4)
 		_, err = io.ReadFull(cli.conn, buf)
 		if err != nil {
 			return err
@@ -150,7 +150,7 @@ func (cli *Client) waitHandshake() error {
 		return fmt.Errorf("handshake authenticate: %s", string(buf))
 	case 1: // success
 		l := binary.BigEndian.Uint16(hdr[6:])
-		buf := make([]byte, l)
+		buf := make([]byte, l*4)
 		_, err = io.ReadFull(cli.conn, buf)
 		if err != nil {
 			return err
@@ -162,7 +162,7 @@ func (cli *Client) waitHandshake() error {
 }
 
 func pad(n int) int {
-	return (n + 3) &^ 3
+	return (n + 3) & ^3
 }
 
 func (cli *Client) parseSetupInfo(data []byte) {
@@ -218,12 +218,11 @@ func (cli *Client) parseSetupInfo(data []byte) {
 	offset += int(cli.info.vendorLen)
 	offset = pad(offset)
 
-	cli.parsePixmapFormats(data[offset:], cli.info.pixmapFormatsLen)
-
-	fmt.Println(cli.info)
+	offset += cli.parsePixmapFormats(data[offset:], cli.info.pixmapFormatsLen)
+	cli.parseScreen(data[offset:], cli.info.screenLen)
 }
 
-func (cli *Client) parsePixmapFormats(data []byte, n byte) {
+func (cli *Client) parsePixmapFormats(data []byte, n byte) int {
 	offset := 0
 
 	for i := byte(0); i < n; i++ {
@@ -242,4 +241,130 @@ func (cli *Client) parsePixmapFormats(data []byte, n byte) {
 
 		cli.info.pixmapFormats = append(cli.info.pixmapFormats, fmt)
 	}
+	return offset
+}
+
+func (cli *Client) parseScreen(data []byte, n byte) {
+	offset := 0
+
+	for i := byte(0); i < n; i++ {
+		var sc screen
+
+		sc.root = window(binary.BigEndian.Uint32(data[offset:]))
+		offset += 4
+
+		sc.defaultColorMap = colorMap(binary.BigEndian.Uint32(data[offset:]))
+		offset += 4
+
+		sc.whitePixel = binary.BigEndian.Uint32(data[offset:])
+		offset += 4
+
+		sc.blackPixel = binary.BigEndian.Uint32(data[offset:])
+		offset += 4
+
+		sc.currentInputMasks = binary.BigEndian.Uint32(data[offset:])
+		offset += 4
+
+		sc.widthInPixels = binary.BigEndian.Uint16(data[offset:])
+		offset += 2
+
+		sc.heightInPixels = binary.BigEndian.Uint16(data[offset:])
+		offset += 2
+
+		sc.widthInMillimeters = binary.BigEndian.Uint16(data[offset:])
+		offset += 2
+
+		sc.heightInMillimeters = binary.BigEndian.Uint16(data[offset:])
+		offset += 2
+
+		sc.minInstalledMaps = binary.BigEndian.Uint16(data[offset:])
+		offset += 2
+
+		sc.maxInstalledMaps = binary.BigEndian.Uint16(data[offset:])
+		offset += 2
+
+		sc.rootVisual = binary.BigEndian.Uint32(data[offset:])
+		offset += 4
+
+		sc.backingStores = data[offset]
+		offset++
+
+		sc.saveUnders = data[offset]
+		offset++
+
+		sc.rootDepth = data[offset]
+		offset++
+
+		sc.numAllowedDepth = data[offset]
+		offset++
+
+		depth, n := cli.parseDepth(data[offset:], sc.numAllowedDepth)
+		sc.allowedDepth = depth
+		offset += n
+
+		cli.info.roots = append(cli.info.roots, sc)
+	}
+}
+
+func (cli *Client) parseDepth(data []byte, n byte) ([]depth, int) {
+	offset := 0
+
+	var ret []depth
+	for i := byte(0); i < n; i++ {
+		var d depth
+
+		d.depth = data[offset]
+		offset++
+
+		offset++ // unused
+
+		d.numVisuals = binary.BigEndian.Uint16(data[offset:])
+		offset += 2
+
+		offset += 4 // unused
+
+		visuals, n := cli.parseVisual(data[offset:], d.numVisuals)
+		d.visuals = visuals
+		offset += n
+
+		ret = append(ret, d)
+	}
+
+	return ret, offset
+}
+
+func (cli *Client) parseVisual(data []byte, n uint16) ([]visual, int) {
+	offset := 0
+
+	var ret []visual
+	for i := uint16(0); i < n; i++ {
+		var v visual
+
+		v.id = binary.BigEndian.Uint32(data[offset:])
+		offset += 4
+
+		v.class = data[offset]
+		offset++
+
+		v.bitsPerRGBValue = data[offset]
+		offset++
+
+		v.colorMapEntries = binary.BigEndian.Uint16(data[offset:])
+		offset += 2
+
+		v.redMask = binary.BigEndian.Uint32(data[offset:])
+		offset += 4
+
+		v.greenMask = binary.BigEndian.Uint32(data[offset:])
+		offset += 4
+
+		v.blueMask = binary.BigEndian.Uint32(data[offset:])
+		offset += 4
+
+		offset += 4 // unused
+
+		ret = append(ret, v)
+	}
+
+	return ret, offset
 }
