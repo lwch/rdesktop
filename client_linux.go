@@ -53,10 +53,11 @@ func (cli *osBase) Close() {
 	C.XCloseDisplay(cli.display)
 }
 
-func (cli *osBase) size() image.Point {
-	var gwa C.XWindowAttributes
-	C.XGetWindowAttributes(cli.display, cli.window, &gwa)
-	return image.Point{X: int(gwa.width), Y: int(gwa.height)}
+func (cli *osBase) size() (image.Point, error) {
+	return cli.cli.GetSize()
+	// var gwa C.XWindowAttributes
+	// C.XGetWindowAttributes(cli.display, cli.window, &gwa)
+	// return image.Point{X: int(gwa.width), Y: int(gwa.height)}
 }
 
 func (cli *osBase) screenshot(img *image.RGBA) error {

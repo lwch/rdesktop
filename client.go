@@ -3,6 +3,8 @@ package screenshot
 import (
 	"image"
 	"sync"
+
+	"github.com/lwch/logging"
 )
 
 // Client screenshot client
@@ -19,14 +21,22 @@ func New() (*Client, error) {
 	if err != nil {
 		return nil, err
 	}
-	size := cli.size()
+	size, err := cli.size()
+	if err != nil {
+		cli.Close()
+		return nil, err
+	}
+	logging.Info("initialize screenshot client, screen_size=(%d, %d)", size.X, size.Y)
 	cli.resize(size)
 	return cli, nil
 }
 
 // Screenshot screenshot
 func (cli *Client) Screenshot() (*image.RGBA, error) {
-	size := cli.size()
+	size, err := cli.size()
+	if err != nil {
+		return nil, err
+	}
 	cli.resize(size)
 	return cli.img, cli.screenshot(cli.img)
 }
