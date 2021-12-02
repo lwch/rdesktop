@@ -1,20 +1,10 @@
 package screenshot
 
 import (
-	"errors"
 	"image"
 
 	"github.com/lwch/screenshot/x11"
 )
-
-// ErrOpenDiaplay can not open display
-var ErrOpenDiaplay = errors.New("can not open display")
-
-// ErrGetWindow can not get root window
-var ErrGetWindow = errors.New("can not get root window")
-
-// ErrGetImage can not get image
-var ErrGetImage = errors.New("can not get image")
 
 type osBase struct {
 	cli *x11.Client
@@ -37,6 +27,13 @@ func (cli *osBase) size() (image.Point, error) {
 	return cli.cli.GetSize()
 }
 
-func (cli *osBase) screenshot(img *image.RGBA) error {
-	return cli.cli.GetImage(img)
+func (cli *Client) screenshot(img *image.RGBA) error {
+	err := cli.cli.GetImage(img)
+	if err != nil {
+		return err
+	}
+	if cli.showCursor {
+		cli.cli.GetCursorImage(img)
+	}
+	return nil
 }

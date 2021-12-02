@@ -12,6 +12,7 @@ func TestScreenshot(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer cli.Close()
+	cli.ShowCursor(true)
 	img, err := cli.Screenshot()
 	if err != nil {
 		t.Fatal(err)

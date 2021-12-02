@@ -11,7 +11,8 @@ import (
 type Client struct {
 	sync.Mutex
 	osBase
-	img *image.RGBA
+	img        *image.RGBA
+	showCursor bool
 }
 
 // New create client
@@ -55,4 +56,8 @@ func (cli *Client) resize(size image.Point) {
 	}
 	logging.Info("resize screenshot client image, size=(%d, %d)", size.X, size.Y)
 	cli.img = image.NewRGBA(image.Rect(0, 0, size.X, size.Y))
+}
+
+func (cli *Client) ShowCursor(v bool) {
+	cli.showCursor = v
 }
