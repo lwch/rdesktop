@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestLinux(t *testing.T) {
+func TestScreenshot(t *testing.T) {
 	cli, err := New()
 	if err != nil {
 		t.Fatal(err)

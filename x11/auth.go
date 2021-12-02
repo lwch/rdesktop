@@ -1,10 +1,5 @@
 package x11
 
-/*
-#include <X11/Xauth.h>
-*/
-import "C"
-
 import (
 	"encoding/binary"
 	"errors"
