@@ -1,14 +1,5 @@
 package screenshot
 
-/*
-#cgo CFLAGS: -DXUTIL_DEFINE_FUNCTIONS
-#cgo LDFLAGS: -lX11
-#include <X11/Xlib.h>
-#include <X11/X.h>
-#include <X11/Xutil.h>
-*/
-import "C"
-
 import (
 	"errors"
 	"image"
@@ -26,20 +17,10 @@ var ErrGetWindow = errors.New("can not get root window")
 var ErrGetImage = errors.New("can not get image")
 
 type osBase struct {
-	display *C.Display
-	window  C.Window
-	cli     *x11.Client
+	cli *x11.Client
 }
 
 func (cli *osBase) init() error {
-	cli.display = C.XOpenDisplay(nil)
-	if cli.display == nil {
-		return ErrOpenDiaplay
-	}
-	cli.window = C.XDefaultRootWindow(cli.display)
-	if cli.window == 0 {
-		return ErrGetWindow
-	}
 	var err error
 	cli.cli, err = x11.New()
 	if err != nil {
@@ -50,7 +31,6 @@ func (cli *osBase) init() error {
 
 // Close close client
 func (cli *osBase) Close() {
-	C.XCloseDisplay(cli.display)
 }
 
 func (cli *osBase) size() (image.Point, error) {
