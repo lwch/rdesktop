@@ -53,5 +53,6 @@ func (cli *Client) resize(size image.Point) {
 			return
 		}
 	}
+	logging.Info("resize screenshot client image, size=(%d, %d)", size.X, size.Y)
 	cli.img = image.NewRGBA(image.Rect(0, 0, size.X, size.Y))
 }
