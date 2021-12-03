@@ -3,7 +3,7 @@
 golang截屏并生成image.RGBA图像，目前支持以下操作系统
 
 - [x] linux(x11)
-- [ ] windows
+- [x] windows
 - [ ] macos
 
 ## 使用方法

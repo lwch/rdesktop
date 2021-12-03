@@ -21,6 +21,9 @@ func (cli *osBase) init() error {
 
 // Close close client
 func (cli *osBase) Close() {
+	if cli.cli != nil {
+		cli.cli.Close()
+	}
 }
 
 func (cli *osBase) size() (image.Point, error) {
