@@ -1,5 +1,7 @@
 package screenshot
 
+import "image"
+
 type osBase struct {
 }
 
