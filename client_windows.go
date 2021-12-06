@@ -50,8 +50,8 @@ func (cli *osBase) size() (image.Point, error) {
 	if bits == 0 {
 		return image.Point{}, fmt.Errorf("get device caps(bits): %v", err)
 	}
-	if cli.bits != 32 {
-		cli.bits = 32
+	if bits != 32 {
+		bits = 32
 		logging.Info("reset bits to 32")
 	}
 	width, _, err := syscall.Syscall(windef.FuncGetDeviceCaps, 2, cli.hdc, windef.HORZRES, 0)
