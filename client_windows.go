@@ -67,6 +67,10 @@ func (cli *osBase) size() (image.Point, error) {
 	cli.bits = bits
 	cli.width = width
 	cli.height = height
+	if cli.bits != 32 {
+		cli.bits = 32
+		logging.Info("reset bits to 32")
+	}
 	return image.Point{
 		X: int(width),
 		Y: int(height),
