@@ -6,6 +6,7 @@ import (
 	"image"
 )
 
+// ErrNoScreens no screen error
 var ErrNoScreens = errors.New("no screens found")
 
 // GetSize get screen size

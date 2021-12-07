@@ -54,8 +54,8 @@ type screen struct {
 
 type setupInfo struct {
 	releaseNumber            uint32
-	resourceIdBase           uint32
-	resourceIdMask           uint32
+	resourceIDBase           uint32
+	resourceIDMask           uint32
 	motionBufferSize         uint32
 	vendorLen                uint16
 	maximumRequestLength     uint16
@@ -133,10 +133,10 @@ func (cli *Client) parseSetupInfo(data []byte) {
 	cli.info.releaseNumber = binary.BigEndian.Uint32(data[offset:])
 	offset += 4
 
-	cli.info.resourceIdBase = binary.BigEndian.Uint32(data[offset:])
+	cli.info.resourceIDBase = binary.BigEndian.Uint32(data[offset:])
 	offset += 4
 
-	cli.info.resourceIdMask = binary.BigEndian.Uint32(data[offset:])
+	cli.info.resourceIDMask = binary.BigEndian.Uint32(data[offset:])
 	offset += 4
 
 	cli.info.motionBufferSize = binary.BigEndian.Uint32(data[offset:])

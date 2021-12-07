@@ -58,6 +58,7 @@ func (cli *Client) resize(size image.Point) {
 	cli.img = image.NewRGBA(image.Rect(0, 0, size.X, size.Y))
 }
 
+// ShowCursor set draw cursor
 func (cli *Client) ShowCursor(v bool) {
 	cli.showCursor = v
 }

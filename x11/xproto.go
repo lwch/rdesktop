@@ -13,6 +13,7 @@ const (
 	allPlanes = 0xffffffff
 )
 
+// GetImage draw image from x11
 func (cli *Client) GetImage(img *image.RGBA) error {
 	screen := cli.info.roots[0]
 	var data [20]byte

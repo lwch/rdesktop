@@ -6,6 +6,7 @@ import (
 	"image"
 )
 
+// GetCursorImage draw cursor image from x11
 func (cli *Client) GetCursorImage(img *image.RGBA) error {
 	opcode := cli.opcode("XFIXES")
 	if opcode == 0 {
