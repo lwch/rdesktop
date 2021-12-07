@@ -1,5 +1,10 @@
 # rdesktop
 
+[![rdesktop](https://github.com/lwch/rdesktop/actions/workflows/build.yml/badge.svg)](https://github.com/lwch/rdesktop/actions/workflows/build.yml)
+[![Go Report Card](https://goreportcard.com/badge/github.com/lwch/rdesktop)](https://goreportcard.com/report/github.com/lwch/rdesktop)
+[![go-mod](https://img.shields.io/github/go-mod/go-version/lwch/rdesktop)](https://github.com/lwch/rdesktop)
+[![license](https://img.shields.io/github/license/lwch/rdesktop)](https://opensource.org/licenses/MIT)
+
 golang远程桌面统一封装库，目前已支持功能
 
 - [x] 截屏
