@@ -1,4 +1,4 @@
-package screenshot
+package rdesktop
 
 import (
 	"errors"
@@ -8,7 +8,7 @@ import (
 	"unsafe"
 
 	"github.com/lwch/logging"
-	"github.com/lwch/screenshot/windef"
+	"github.com/lwch/rdesktop/windef"
 )
 
 type osBase struct {

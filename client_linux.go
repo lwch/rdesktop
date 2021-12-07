@@ -1,9 +1,9 @@
-package screenshot
+package rdesktop
 
 import (
 	"image"
 
-	"github.com/lwch/screenshot/x11"
+	"github.com/lwch/rdesktop/x11"
 )
 
 type osBase struct {

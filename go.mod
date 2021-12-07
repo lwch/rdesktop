@@ -1,4 +1,4 @@
-module github.com/lwch/screenshot
+module github.com/lwch/rdesktop
 
 go 1.17
 

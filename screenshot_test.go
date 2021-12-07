@@ -1,4 +1,4 @@
-package screenshot
+package rdesktop
 
 import (
 	"image/jpeg"
