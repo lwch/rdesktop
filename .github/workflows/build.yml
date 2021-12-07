@@ -44,4 +44,5 @@ jobs:
 
       - name: Test
         uses: GabrielBB/xvfb-action@v1
-        run: go test -v ./...
+        with:
+          run: go test -v ./...
