@@ -120,7 +120,7 @@ func (cli *Client) queryExtension(name string) (bool, byte, error) {
 func errCheck(data []byte) error {
 	// TODO error parse
 	if data[0] == 0 {
-		return errors.New("error occured")
+		return errors.New("error occurred")
 	}
 	return nil
 }
