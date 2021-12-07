@@ -34,8 +34,10 @@ func (cli *Client) GetImage(img *image.RGBA) error {
 	if err != nil {
 		return err
 	}
-	_ = ret[1] // depth
-	// TODO: depth is not 24
+	if ret[1] != 24 {
+		// TODO: support depth is not 24
+		return nil
+	}
 	offset := 0
 	for y := 0; y < int(screen.heightInPixels); y++ {
 		for x := 0; x < int(screen.widthInPixels); x++ {
