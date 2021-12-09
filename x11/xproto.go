@@ -50,6 +50,7 @@ func (cli *Client) GetImage(img *image.RGBA) error {
 	return nil
 }
 
+// WarpPointer mouse move for x11
 func (cli *Client) WarpPointer(x, y uint16) error {
 	screen := cli.info.roots[0]
 	var data [24]byte
