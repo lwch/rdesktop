@@ -5,6 +5,7 @@ import (
 	"errors"
 )
 
+// TestFakeInput mouse input or keyboard input
 func (cli *Client) TestFakeInput(t, detail byte, x, y uint16) error {
 	opcode := cli.opcode("XTEST")
 	if opcode == 0 {
