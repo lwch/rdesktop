@@ -25,3 +25,7 @@ func (cli *Client) screenshot(img *image.RGBA) error {
 func (cli *osBase) MouseMove(x, y int) error {
 	// TODO
 }
+
+// ToggleMouse toggle mouse button event
+func (cli *Client) ToggleMouse(button mouseButton, down bool) error {
+}

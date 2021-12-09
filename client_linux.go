@@ -6,17 +6,6 @@ import (
 	"github.com/lwch/rdesktop/x11"
 )
 
-type mouseButton byte
-
-const (
-	// MouseLeft left button for mouse
-	MouseLeft mouseButton = 1
-	// MouseMiddle middle button for mouse
-	MouseMiddle mouseButton = 2
-	// MouseRight right button for mouse
-	MouseRight mouseButton = 3
-)
-
 type osBase struct {
 	cli *x11.Client
 }
@@ -63,5 +52,5 @@ func (cli *Client) ToggleMouse(button mouseButton, down bool) error {
 	if !down {
 		t = 5
 	}
-	return cli.cli.TestFakeInput(byte(t), byte(button), 0, 0)
+	return cli.cli.TestFakeInput(byte(t)+1, byte(button), 0, 0)
 }

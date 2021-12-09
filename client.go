@@ -7,6 +7,17 @@ import (
 	"github.com/lwch/logging"
 )
 
+type mouseButton byte
+
+const (
+	// MouseLeft left button for mouse
+	MouseLeft mouseButton = iota
+	// MouseMiddle middle button for mouse
+	MouseMiddle
+	// MouseRight right button for mouse
+	MouseRight
+)
+
 // Client screenshot client
 type Client struct {
 	sync.Mutex
