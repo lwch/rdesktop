@@ -9,9 +9,12 @@ import (
 type mouseButton byte
 
 const (
-	MouseLeft   mouseButton = 1
+	// MouseLeft left button for mouse
+	MouseLeft mouseButton = 1
+	// MouseMiddle middle button for mouse
 	MouseMiddle mouseButton = 2
-	MouseRight  mouseButton = 3
+	// MouseRight right button for mouse
+	MouseRight mouseButton = 3
 )
 
 type osBase struct {
