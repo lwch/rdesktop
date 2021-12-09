@@ -6,6 +6,14 @@ import (
 	"github.com/lwch/rdesktop/x11"
 )
 
+type mouseButton byte
+
+const (
+	MouseLeft   mouseButton = 1
+	MouseMiddle mouseButton = 2
+	MouseRight  mouseButton = 3
+)
+
 type osBase struct {
 	cli *x11.Client
 }
@@ -43,9 +51,14 @@ func (cli *Client) screenshot(img *image.RGBA) error {
 
 // MouseMove move mouse to x,y
 func (cli *Client) MouseMove(x, y int) error {
-	err := cli.cli.WarpPointer(uint16(x), uint16(y))
-	if err != nil {
-		return err
+	return cli.cli.WarpPointer(uint16(x), uint16(y))
+}
+
+// ToggleMouse toggle mouse button event, https://www.x.org/releases/X11R7.7/doc/xextproto/xtest.html
+func (cli *Client) ToggleMouse(button mouseButton, down bool) error {
+	t := 4 // button down
+	if !down {
+		t = 5
 	}
-	return nil
+	return cli.cli.TestFakeInput(byte(t), byte(button), 0, 0)
 }

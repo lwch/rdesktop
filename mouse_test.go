@@ -31,3 +31,23 @@ func TestMouseMove(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestMouseClient(t *testing.T) {
+	cli, err := New()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer cli.Close()
+	err = cli.MouseMove(0, 0)
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = cli.ToggleMouse(MouseLeft, true)
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = cli.ToggleMouse(MouseLeft, false)
+	if err != nil {
+		t.Fatal(err)
+	}
+}
