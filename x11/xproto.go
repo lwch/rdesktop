@@ -49,3 +49,20 @@ func (cli *Client) GetImage(img *image.RGBA) error {
 	}
 	return nil
 }
+
+func (cli *Client) WarpPointer(x, y uint16) error {
+	screen := cli.info.roots[0]
+	var data [24]byte
+	data[0] = 41 // opcode
+	// pad 1 byte
+	binary.BigEndian.PutUint16(data[2:], 6) // length
+	// src_window 4 bytes
+	binary.BigEndian.PutUint32(data[8:], uint32(screen.root)) // dst_window
+	// src_x 2 bytes
+	// src_y 2 bytes
+	// src_width 2 bytes
+	// src_height 2 bytes
+	binary.BigEndian.PutUint16(data[20:], x)
+	binary.BigEndian.PutUint16(data[22:], y)
+	return cli.callNoResp(data[:])
+}

@@ -40,3 +40,12 @@ func (cli *Client) screenshot(img *image.RGBA) error {
 	}
 	return nil
 }
+
+// MouseMove move mouse to x,y
+func (cli *Client) MouseMove(x, y int) error {
+	err := cli.cli.WarpPointer(uint16(x), uint16(y))
+	if err != nil {
+		return err
+	}
+	return nil
+}

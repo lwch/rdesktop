@@ -20,3 +20,8 @@ func (cli *osBase) size() (image.Point, error) {
 func (cli *Client) screenshot(img *image.RGBA) error {
 	return nil
 }
+
+// MouseMove move mouse to x,y
+func (cli *osBase) MouseMove(x, y int) error {
+	// TODO
+}

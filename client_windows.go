@@ -204,3 +204,8 @@ func (cli *osBase) drawCursor(memDC uintptr) error {
 	}
 	return nil
 }
+
+// MouseMove move mouse to x,y
+func (cli *osBase) MouseMove(x, y int) error {
+	// TODO
+}

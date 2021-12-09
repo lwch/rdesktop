@@ -96,6 +96,16 @@ func (cli *Client) call(data []byte) ([]byte, error) {
 	return data, nil
 }
 
+func (cli *Client) callNoResp(data []byte) error {
+	cli.callLock.Lock()
+	defer cli.callLock.Unlock()
+	_, err := io.Copy(cli.conn, bytes.NewReader(data))
+	if err != nil {
+		return fmt.Errorf("send data: %v", err)
+	}
+	return nil
+}
+
 func (cli *Client) queryExtension(name string) (bool, byte, error) {
 	size := 8 + pad(len(name))
 	data := make([]byte, size)
