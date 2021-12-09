@@ -6,7 +6,7 @@ import (
 )
 
 // TestFakeInput mouse input or keyboard input
-func (cli *Client) TestFakeInput(t, detail byte, x, y uint16) error {
+func (cli *Client) TestFakeInput(t, detail byte) error {
 	opcode := cli.opcode("XTEST")
 	if opcode == 0 {
 		return errors.New("extension XTEST not supported")
@@ -23,8 +23,8 @@ func (cli *Client) TestFakeInput(t, detail byte, x, y uint16) error {
 	binary.BigEndian.PutUint32(data[12:], uint32(screen.root)) // window
 	// pad 4 bytes
 	// pad 4 bytes
-	binary.BigEndian.PutUint16(data[24:], x) // root_x
-	binary.BigEndian.PutUint16(data[26:], y) // root_y
+	// root_x 2 bytes
+	// root_y 2 bytes
 	// pad 4 bytes
 	// pad 2 bytes
 	// pad 1 byte

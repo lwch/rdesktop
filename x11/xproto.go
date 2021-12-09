@@ -67,3 +67,24 @@ func (cli *Client) WarpPointer(x, y uint16) error {
 	binary.BigEndian.PutUint16(data[22:], y)
 	return cli.callNoResp(data[:])
 }
+
+// GetKeyboardMapping https://gitlab.freedesktop.org/xorg/lib/libx11/-/blob/master/src/GetPntMap.c#L88
+func (cli *Client) GetKeyboardMapping(first, count keyCode) ([]byte, byte, error) {
+	var data [8]byte
+	data[0] = 101 // opcode
+	// pad 1 byte
+	binary.BigEndian.PutUint16(data[2:], 2) // length
+	data[4] = byte(first)
+	data[5] = byte(count)
+	// pad 2 bytes
+	ret, err := cli.call(data[:])
+	if err != nil {
+		return nil, 0, err
+	}
+	err = errCheck(ret)
+	if err != nil {
+		return nil, 0, err
+	}
+	per := ret[1]
+	return ret[32:], per, nil
+}

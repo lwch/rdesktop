@@ -1,6 +1,7 @@
 package rdesktop
 
 import (
+	"fmt"
 	"image"
 
 	"github.com/lwch/rdesktop/x11"
@@ -50,7 +51,21 @@ func (cli *Client) MouseMove(x, y int) error {
 func (cli *Client) ToggleMouse(button mouseButton, down bool) error {
 	t := 4 // button down
 	if !down {
-		t = 5
+		t = 5 // button up
 	}
-	return cli.cli.TestFakeInput(byte(t)+1, byte(button), 0, 0)
+	return cli.cli.TestFakeInput(byte(t), byte(button)+1)
+}
+
+// ToggleKey toggle keyboard event
+func (cli *Client) ToggleKey(key string, down bool) error {
+	code := checkKeycodes(key)
+	if code == 0 {
+		return fmt.Errorf("key not found: %s", key)
+	}
+	t := 2 // key down
+	if !down {
+		t = 3 // key up
+	}
+	n := cli.cli.KeysymToKeycode(code)
+	return cli.cli.TestFakeInput(byte(t), n)
 }

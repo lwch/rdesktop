@@ -20,6 +20,8 @@ type Client struct {
 	info       setupInfo
 	extLock    sync.RWMutex
 	extensions map[string]byte
+	keyMapping []byte
+	keyPer     byte
 }
 
 // New new client
@@ -35,6 +37,13 @@ func New() (*Client, error) {
 		extensions: make(map[string]byte),
 	}
 	err = cli.handshake()
+	if err != nil {
+		conn.Close()
+		return nil, err
+	}
+	// 初始化过程详见：https://gitlab.freedesktop.org/xorg/lib/libx11/-/blob/master/src/KeyBind.c#L257
+	n := cli.info.maxKeycode - cli.info.minKeycode + 1
+	cli.keyMapping, cli.keyPer, err = cli.GetKeyboardMapping(cli.info.minKeycode, n)
 	if err != nil {
 		conn.Close()
 		return nil, err
