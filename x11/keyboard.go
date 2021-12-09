@@ -20,7 +20,7 @@ func intValue(data []byte, offset int) int {
 	return int(binary.BigEndian.Uint32(data[offset*4:]))
 }
 
-// KeysymToKeycode https://gitlab.freedesktop.org/xorg/lib/libx11/-/blob/master/src/KeyBind.c#L85
+// KeyCodetoKeySym https://gitlab.freedesktop.org/xorg/lib/libx11/-/blob/master/src/KeyBind.c#L85
 func (cli *Client) KeyCodetoKeySym(code keyCode, col int) int {
 	if col < 0 || (col >= int(cli.keyPer) && col > 3) ||
 		code < cli.info.minKeycode || code > cli.info.maxKeycode {
