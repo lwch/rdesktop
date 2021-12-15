@@ -32,7 +32,7 @@ func TestMouseMove(t *testing.T) {
 	}
 }
 
-func TestMouseClient(t *testing.T) {
+func TestMouseClick(t *testing.T) {
 	cli, err := New()
 	if err != nil {
 		t.Fatal(err)
@@ -50,4 +50,13 @@ func TestMouseClient(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+}
+
+func TestScroll(t *testing.T) {
+	cli, err := New()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer cli.Close()
+	cli.Scroll(0, -100)
 }

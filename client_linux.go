@@ -3,6 +3,7 @@ package rdesktop
 import (
 	"fmt"
 	"image"
+	"math"
 
 	"github.com/lwch/rdesktop/x11"
 )
@@ -68,4 +69,30 @@ func (cli *Client) ToggleKey(key string, down bool) error {
 	}
 	n := cli.cli.KeysymToKeycode(code)
 	return cli.cli.TestFakeInput(byte(t), n)
+}
+
+// Scroll https://github.com/go-vgo/robotgo/blob/master/mouse/mouse_c.h#L313
+func (cli *Client) Scroll(x, y int) {
+	run := func(dir byte, cnt int) {
+		for i := 0; i < cnt; i++ {
+			// https://gitlab.freedesktop.org/xorg/lib/libxtst/-/blob/master/src/XTest.c#L181
+			// transform press to 4 and up to 5
+			cli.cli.TestFakeInput(4, dir)
+			cli.cli.TestFakeInput(5, dir)
+		}
+	}
+	if x != 0 {
+		dir := 6 // up
+		if x < 0 {
+			dir = 7 // down
+		}
+		run(byte(dir), int(math.Abs(float64(x))))
+	}
+	if y != 0 {
+		dir := 4 // up
+		if y < 0 {
+			dir = 5 // down
+		}
+		run(byte(dir), int(math.Abs(float64(y))))
+	}
 }
