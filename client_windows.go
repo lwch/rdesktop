@@ -2,6 +2,7 @@ package rdesktop
 
 /*
 #include "mouse_windows.h"
+#include "keyboard_windows.h"
 */
 import "C"
 
@@ -231,6 +232,8 @@ func (cli *Client) ToggleMouse(button mouseButton, down bool) error {
 
 // ToggleKey toggle keyboard event
 func (cli *Client) ToggleKey(key string, down bool) error {
+	code := checkKeycodes(key)
+	C.keyboard_toggle(C.uint(code), C.bool(down))
 	return nil
 }
 

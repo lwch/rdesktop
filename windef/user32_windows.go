@@ -16,6 +16,8 @@ var (
 	FuncGetIconInfo, _ = syscall.GetProcAddress(syscall.Handle(libUser32), "GetIconInfo")
 	// FuncDrawIcon https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-drawicon
 	FuncDrawIcon, _ = syscall.GetProcAddress(syscall.Handle(libUser32), "DrawIcon")
+	// FuncVkKeyScan https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-vkkeyscanw
+	FuncVkKeyScan, _ = syscall.GetProcAddress(syscall.Handle(libUser32), "VkKeyScanW")
 )
 
 type (
