@@ -216,3 +216,12 @@ func (cli *Client) ToggleMouse(button mouseButton, down bool) error {
 	// TODO
 	return nil
 }
+
+// ToggleKey toggle keyboard event
+func (cli *Client) ToggleKey(key string, down bool) error {
+	return nil
+}
+
+// Scroll mouse scroll
+func (cli *Client) Scroll(x, y int) {
+}

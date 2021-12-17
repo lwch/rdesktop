@@ -24,8 +24,19 @@ func (cli *Client) screenshot(img *image.RGBA) error {
 // MouseMove move mouse to x,y
 func (cli *osBase) MouseMove(x, y int) error {
 	// TODO
+	return nil
 }
 
 // ToggleMouse toggle mouse button event
 func (cli *Client) ToggleMouse(button mouseButton, down bool) error {
+	return nil
+}
+
+// ToggleKey toggle keyboard event
+func (cli *Client) ToggleKey(key string, down bool) error {
+	return nil
+}
+
+// Scroll mouse scroll
+func (cli *Client) Scroll(x, y int) {
 }
