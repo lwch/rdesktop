@@ -1,7 +1,7 @@
 package keycode
 
 /*
-#cgo linux LDFLAGS: -lX11
+#cgo LDFLAGS: -lX11
 #include <X11/Xlib.h>
 #include <stdlib.h>
 */
