@@ -38,7 +38,7 @@ func TestMouseClick(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer cli.Close()
-	err = cli.MouseMove(0, 0)
+	err = cli.MouseMove(10, 50)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -58,5 +58,5 @@ func TestScroll(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer cli.Close()
-	cli.Scroll(0, -100)
+	cli.Scroll(0, 100)
 }

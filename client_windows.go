@@ -1,5 +1,10 @@
 package rdesktop
 
+/*
+#include "mouse_windows.h"
+*/
+import "C"
+
 import (
 	"errors"
 	"fmt"
@@ -207,13 +212,20 @@ func (cli *osBase) drawCursor(memDC uintptr) error {
 
 // MouseMove move mouse to x,y
 func (cli *osBase) MouseMove(x, y int) error {
-	// TODO
+	C.mouse_move(C.uint(x), C.uint(y))
 	return nil
 }
 
 // ToggleMouse toggle mouse button event
 func (cli *Client) ToggleMouse(button mouseButton, down bool) error {
-	// TODO
+	switch button {
+	case MouseLeft:
+		C.mouse_toggle(0, C.bool(down))
+	case MouseMiddle:
+		C.mouse_toggle(2, C.bool(down))
+	case MouseRight:
+		C.mouse_toggle(1, C.bool(down))
+	}
 	return nil
 }
 
@@ -224,4 +236,5 @@ func (cli *Client) ToggleKey(key string, down bool) error {
 
 // Scroll mouse scroll
 func (cli *Client) Scroll(x, y int) {
+	C.scroll(C.uint(x), C.uint(y))
 }
