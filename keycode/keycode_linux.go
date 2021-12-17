@@ -1,4 +1,4 @@
-package rdesktop
+package keycode
 
 /*
 #cgo linux LDFLAGS: -lX11
@@ -11,8 +11,8 @@ import (
 	"unsafe"
 )
 
-// 数据来源于X11/keysymdef.h
-var keyMaps = map[string]int{
+// Maps 数据来源于X11/keysymdef.h
+var Maps = map[string]int{
 	"backspace": 0xff08,
 	"delete":    0xffff,
 	"enter":     0xff0d,
@@ -47,7 +47,8 @@ var keyMaps = map[string]int{
 	"space":   0x0020,
 }
 
-func keyCodeForChar(k string) int {
+// ForChar char key code
+func ForChar(k string) int {
 	key := C.CString(k)
 	code := C.XStringToKeysym(key)
 	C.free(unsafe.Pointer(key))
