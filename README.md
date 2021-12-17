@@ -20,15 +20,29 @@ golang远程桌面统一封装库，目前已支持功能
 
 ## 截屏
 
-    cli, err := rdesktop.New()
+    cli, _ := rdesktop.New()
     cli.ShowCursor(true) // 是否绘制鼠标
     img, err := cli.Screenshot()
     // use of img
 
-## 键鼠操作
+## 鼠标操作
 
-暂未实现
+    cli, _ := rdesktop.New()
+    cli.MouseMove(100, 100) // 将鼠标移动到100,100
+    cli.ToggleMouse(rdesktop.MouseLeft, true) // 鼠标左键按下
+    cli.ToggleMouse(rdesktop.MouseLeft, false) // 鼠标左键弹起
+    cli.Scroll(0, -100) // 向下滚动100像素
+
+## 键盘操作
+
+    cli, _ := rdesktop.New()
+    cli.ToggleKey("control", true) // 按下ctrl键
+    cli.ToggleKey("a", true) // 按下a键
+    cli.ToggleKey("control", false) // 弹起ctrl键
+    cli.ToggleKey("a", false) // 弹起a键
 
 ## 剪切板操作
 
-暂未实现
+    cli, _ := rdesktop.New()
+    cli.ClipboardSet("hello") // 将剪贴板内容设置为hello
+    data, _ := cli.ClipboardGet() // 获取剪贴板内容

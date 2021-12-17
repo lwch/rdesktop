@@ -5,6 +5,7 @@ import (
 	"sync"
 
 	"github.com/lwch/logging"
+	"github.com/lwch/rdesktop/clipboard"
 )
 
 type mouseButton byte
@@ -72,4 +73,14 @@ func (cli *Client) resize(size image.Point) {
 // ShowCursor set draw cursor
 func (cli *Client) ShowCursor(v bool) {
 	cli.showCursor = v
+}
+
+// ClipboardSet set text to clipboard
+func (cli *Client) ClipboardSet(text string) error {
+	return clipboard.Set(text)
+}
+
+// ClipboardGet get text from clipboard
+func (cli *Client) ClipboardGet() (string, error) {
+	return clipboard.Get()
 }
