@@ -1,3 +1,6 @@
+#ifndef _MOUSE_WINDOWS_H_
+#define _MOUSE_WINDOWS_H_
+
 #include <windows.h>
 #include <stdint.h>
 #include <stdbool.h>
@@ -62,3 +65,5 @@ void scroll(uint32_t x, uint32_t y) {
     SendInput(1, &mouseScrollInputH, sizeof(mouseScrollInputH));
     SendInput(1, &mouseScrollInputV, sizeof(mouseScrollInputV));
 }
+
+#endif
