@@ -37,3 +37,7 @@ func (cli *Client) ToggleMouse(button MouseButton, down bool) error {
 func (cli *Client) ToggleKey(key string, down bool) error {
 	return ErrUnsupported
 }
+
+// Scroll mouse scroll
+func (cli *Client) Scroll(x, y int) {
+}
