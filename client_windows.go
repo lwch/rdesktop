@@ -218,7 +218,7 @@ func (cli *osBase) MouseMove(x, y int) error {
 }
 
 // ToggleMouse toggle mouse button event
-func (cli *Client) ToggleMouse(button mouseButton, down bool) error {
+func (cli *Client) ToggleMouse(button MouseButton, down bool) error {
 	switch button {
 	case MouseLeft:
 		C.mouse_toggle(0, C.bool(down))

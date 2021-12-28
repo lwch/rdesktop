@@ -8,11 +8,12 @@ import (
 	"github.com/lwch/rdesktop/clipboard"
 )
 
-type mouseButton byte
+// MouseButton button of mouse
+type MouseButton byte
 
 const (
 	// MouseLeft left button for mouse
-	MouseLeft mouseButton = iota
+	MouseLeft MouseButton = iota
 	// MouseMiddle middle button for mouse
 	MouseMiddle
 	// MouseRight right button for mouse

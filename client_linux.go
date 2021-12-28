@@ -49,7 +49,7 @@ func (cli *Client) MouseMove(x, y int) error {
 }
 
 // ToggleMouse toggle mouse button event, https://www.x.org/releases/X11R7.7/doc/xextproto/xtest.html
-func (cli *Client) ToggleMouse(button mouseButton, down bool) error {
+func (cli *Client) ToggleMouse(button MouseButton, down bool) error {
 	t := 4 // button down
 	if !down {
 		t = 5 // button up
