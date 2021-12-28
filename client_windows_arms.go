@@ -22,3 +22,18 @@ func (cli *osBase) Close() {
 func (cli *Client) screenshot(img *image.RGBA) error {
 	return ErrUnsupported
 }
+
+// MouseMove move mouse to x,y
+func (cli *osBase) MouseMove(x, y int) error {
+	return ErrUnsupported
+}
+
+// ToggleMouse toggle mouse button event
+func (cli *Client) ToggleMouse(button MouseButton, down bool) error {
+	return ErrUnsupported
+}
+
+// ToggleKey toggle keyboard event
+func (cli *Client) ToggleKey(key string, down bool) error {
+	return ErrUnsupported
+}
