@@ -1,3 +1,7 @@
+//go:build windows && (386 || amd64)
+// +build windows
+// +build 386 amd64
+
 package rdesktop
 
 /*
