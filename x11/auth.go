@@ -2,9 +2,10 @@ package x11
 
 import (
 	"encoding/binary"
-	"errors"
+	"fmt"
 	"io"
 	"os"
+	"os/user"
 	"path"
 )
 
@@ -27,10 +28,16 @@ func readAuth() (xauth, error) {
 	fname := os.Getenv("XAUTHORITY")
 	if len(fname) == 0 {
 		home := os.Getenv("HOME")
-		if len(home) == 0 {
-			return auth, errors.New("can not get env of HOME directory")
+		if len(home) > 0 {
+			fname = path.Join(home, ".Xauthority")
 		}
-		fname = path.Join(home, ".Xauthority")
+	}
+	if len(fname) == 0 {
+		u, err := user.Current()
+		if err != nil {
+			return auth, err
+		}
+		fname = fmt.Sprintf("/run/user/%s/gdm/Xauthority", u.Uid)
 	}
 	f, err := os.Open(fname)
 	if err != nil {
