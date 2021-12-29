@@ -7,6 +7,8 @@ import (
 	"os"
 	"os/user"
 	"path"
+
+	"github.com/lwch/logging"
 )
 
 // from X11/Xauth.h
@@ -38,6 +40,7 @@ func readAuth() (xauth, error) {
 			return auth, err
 		}
 		fname = fmt.Sprintf("/run/user/%s/gdm/Xauthority", u.Uid)
+		logging.Info("default to %s", fname)
 	}
 	f, err := os.Open(fname)
 	if err != nil {
