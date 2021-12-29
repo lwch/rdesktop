@@ -41,6 +41,13 @@ func readAuth() (xauth, error) {
 		}
 		fname = fmt.Sprintf("/run/user/%s/gdm/Xauthority", u.Uid)
 		logging.Info("default to %s", fname)
+	} else if _, err := os.Stat(fname); os.IsNotExist(err) {
+		u, err := user.Current()
+		if err != nil {
+			return auth, err
+		}
+		fname = fmt.Sprintf("/run/user/%s/gdm/Xauthority", u.Uid)
+		logging.Info("default to %s", fname)
 	}
 	f, err := os.Open(fname)
 	if err != nil {
