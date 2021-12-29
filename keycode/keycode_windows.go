@@ -37,7 +37,7 @@ var Maps = map[string]int{
 	//
 	"cmd":     0x5B, // VK_LWIN
 	"alt":     0x12, // VK_MENU
-	"control": 0xA2, // VK_LCONTROL
+	"control": 0x11, // VK_CONTROL
 	"shift":   0xA0, // VK_LSHIFT
 	"space":   0x20, // VK_SPACE
 }
