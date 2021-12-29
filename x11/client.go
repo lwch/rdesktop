@@ -11,6 +11,8 @@ import (
 	"path"
 	"strings"
 	"sync"
+
+	"github.com/lwch/logging"
 )
 
 // Client x11 client
@@ -28,6 +30,10 @@ type Client struct {
 func New() (*Client, error) {
 	disp := os.Getenv("DISPLAY")
 	idx := strings.TrimPrefix(disp, ":")
+	if len(idx) == 0 {
+		idx = "0"
+		logging.Info("default to DISPLAY 0")
+	}
 	conn, err := net.Dial("unix", path.Join("/tmp", ".X11-unix", fmt.Sprintf("X%s", idx)))
 	if err != nil {
 		return nil, err
