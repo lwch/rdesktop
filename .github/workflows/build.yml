@@ -18,8 +18,8 @@ jobs:
           - windows-2016
           - windows-2019
           - windows-2022
-          # - macos-10.15
-          # - macos-11
+          - macos-10.15
+          - macos-11
         go:
           - '1.16'
           - '1.17'
@@ -39,6 +39,4 @@ jobs:
           ineffassign ./...
 
       - name: Test
-        uses: GabrielBB/xvfb-action@v1
-        with:
-          run: go test -v ./...
+        run: go build -v ./...
