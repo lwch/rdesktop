@@ -6,43 +6,44 @@
 [![go-mod](https://img.shields.io/github/go-mod/go-version/lwch/rdesktop)](https://github.com/lwch/rdesktop)
 [![license](https://img.shields.io/github/license/lwch/rdesktop)](https://opensource.org/licenses/MIT)
 
-golang远程桌面统一封装库，目前已支持功能
+golang desktop controller library
 
-- [x] 截屏
-- [x] 键鼠操作
-- [x] 剪切板操作
+- [x] screenshot
+- [x] keyboard/mouse events
+- [x] scroll events
+- [x] clipboard get/set(only supported text data)
 
-已支持操作系统
+supported system
 
 - [x] linux(x11)
 - [x] windows
 - [ ] macos
 
-## 截屏
+## screenshot
 
     cli, _ := rdesktop.New()
-    cli.ShowCursor(true) // 是否绘制鼠标
+    cli.ShowCursor(true) // show the cursor image
     img, err := cli.Screenshot()
     // use of img
 
-## 鼠标操作
+## mouse
 
     cli, _ := rdesktop.New()
-    cli.MouseMove(100, 100) // 将鼠标移动到100,100
-    cli.ToggleMouse(rdesktop.MouseLeft, true) // 鼠标左键按下
-    cli.ToggleMouse(rdesktop.MouseLeft, false) // 鼠标左键弹起
-    cli.Scroll(0, -100) // 向下滚动100像素
+    cli.MouseMove(100, 100) // move mouse to 100,100
+    cli.ToggleMouse(rdesktop.MouseLeft, true) // mouse left button press down
+    cli.ToggleMouse(rdesktop.MouseLeft, false) // mouse left button press up
+    cli.Scroll(0, -100) // scroll down 100 pixel
 
-## 键盘操作
-
-    cli, _ := rdesktop.New()
-    cli.ToggleKey("control", true) // 按下ctrl键
-    cli.ToggleKey("a", true) // 按下a键
-    cli.ToggleKey("control", false) // 弹起ctrl键
-    cli.ToggleKey("a", false) // 弹起a键
-
-## 剪切板操作
+## keyboard
 
     cli, _ := rdesktop.New()
-    cli.ClipboardSet("hello") // 将剪贴板内容设置为hello
-    data, _ := cli.ClipboardGet() // 获取剪贴板内容
+    cli.ToggleKey("control", true) // press down ctrl
+    cli.ToggleKey("a", true) // press down a
+    cli.ToggleKey("control", false) // press up ctrl
+    cli.ToggleKey("a", false) // press up a
+
+## clipboard
+
+    cli, _ := rdesktop.New()
+    cli.ClipboardSet("hello") // set "hello" text to clipboard
+    data, _ := cli.ClipboardGet() // get clipboard data
