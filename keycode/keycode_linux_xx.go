@@ -5,7 +5,7 @@
 package keycode
 
 /*
-#cgo LDFLAGS: -lpthread -lX11 -lxcb -lXau -lXdmcp
+#cgo LDFLAGS: -lX11 -lxcb -lpthread -lXau -lXdmcp
 #include <X11/Xlib.h>
 #include <stdlib.h>
 */
