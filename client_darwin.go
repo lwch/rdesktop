@@ -3,6 +3,10 @@ package rdesktop
 /*
 #cgo LDFLAGS: -framework CoreGraphics -framework CoreFoundation
 #include <CoreGraphics/CoreGraphics.h>
+
+CGEventRef createWheelEvent(int x, int y) {
+	return CGEventCreateScrollWheelEvent(NULL, kCGScrollEventUnitPixel, 2, y, x);
+}
 */
 import "C"
 
@@ -115,4 +119,7 @@ func (cli *Client) ToggleKey(key string, down bool) error {
 
 // Scroll mouse scroll
 func (cli *Client) Scroll(x, y int) {
+	event := C.createWheelEvent(C.int(x), C.int(y))
+	defer C.CFRelease(C.CFTypeRef(event))
+	C.CGEventPost(C.kCGHIDEventTap, event)
 }
