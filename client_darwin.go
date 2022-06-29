@@ -7,6 +7,7 @@ package rdesktop
 import "C"
 
 import (
+	"fmt"
 	"image"
 	"unsafe"
 )
@@ -22,6 +23,7 @@ func (cli *osBase) init() error {
 
 // Close close client
 func (cli *osBase) Close() {
+	C.CGDisplayRelease(cli.id)
 }
 
 func getDisplayID() C.CGDirectDisplayID {
@@ -41,6 +43,11 @@ func (cli *osBase) size() (image.Point, error) {
 }
 
 func (cli *Client) screenshot(img *image.RGBA) error {
+	if cli.showCursor {
+		C.CGDisplayShowCursor(cli.id)
+	} else {
+		C.CGDisplayHideCursor(cli.id)
+	}
 	display := C.CGDisplayCreateImage(cli.id)
 	raw := C.CGDataProviderCopyData(C.CGImageGetDataProvider(display))
 	ptr := unsafe.Pointer(C.CFDataGetBytePtr(raw))
@@ -54,12 +61,50 @@ func (cli *Client) screenshot(img *image.RGBA) error {
 
 // MouseMove move mouse to x,y
 func (cli *osBase) MouseMove(x, y int) error {
-	// TODO
+	pt := C.CGPointMake(C.double(x), C.double(y))
+	err := C.CGDisplayMoveCursorToPoint(cli.id, pt)
+	if err != 0 {
+		return fmt.Errorf("can not move: %d", err)
+	}
 	return nil
+}
+
+func getMousePosition() C.CGPoint {
+	event := C.CGEventCreate(C.CGEventSourceRef(0))
+	defer C.CFRelease(C.CFTypeRef(event))
+	return C.CGEventGetLocation(event)
 }
 
 // ToggleMouse toggle mouse button event
 func (cli *Client) ToggleMouse(button MouseButton, down bool) error {
+	var t C.CGEventType
+	var btn C.CGMouseButton
+	switch button {
+	case MouseLeft:
+		if down {
+			t = C.kCGEventLeftMouseDown
+		} else {
+			t = C.kCGEventLeftMouseUp
+		}
+		btn = 0
+	case MouseMiddle:
+		if down {
+			t = C.kCGEventOtherMouseDown
+		} else {
+			t = C.kCGEventOtherMouseUp
+		}
+		btn = 2
+	case MouseRight:
+		if down {
+			t = C.kCGEventRightMouseDown
+		} else {
+			t = C.kCGEventRightMouseUp
+		}
+		btn = 1
+	}
+	event := C.CGEventCreateMouseEvent(C.CGEventSourceRef(0), t, getMousePosition(), btn)
+	defer C.CFRelease(C.CFTypeRef(event))
+	C.CGEventPost(C.kCGSessionEventTap, event)
 	return nil
 }
 
