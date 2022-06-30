@@ -13,11 +13,16 @@ import "C"
 import (
 	"fmt"
 	"image"
+	"time"
 	"unsafe"
 )
 
 type osBase struct {
-	id C.CGDirectDisplayID
+	id        C.CGDirectDisplayID
+	ctrlDown  bool
+	altDown   bool
+	shiftDown bool
+	cmdDown   bool
 }
 
 func (cli *osBase) init() error {
@@ -114,6 +119,50 @@ func (cli *Client) ToggleMouse(button MouseButton, down bool) error {
 
 // ToggleKey toggle keyboard event
 func (cli *Client) ToggleKey(key string, down bool) error {
+	code := checkKeycodes(key)
+	event := C.CGEventCreateKeyboardEvent(C.CGEventSourceRef(0), C.CGKeyCode(code), true)
+	if event == 0 {
+		return nil
+	}
+	defer C.CFRelease(C.CFTypeRef(event))
+
+	if down {
+		C.CGEventSetType(event, C.kCGEventKeyDown)
+	} else {
+		C.CGEventSetType(event, C.kCGEventKeyUp)
+	}
+
+	flag := 0
+	if cli.ctrlDown {
+		flag |= C.kCGEventFlagMaskControl
+	}
+	if cli.altDown {
+		flag |= C.kCGEventFlagMaskAlternate
+	}
+	if cli.cmdDown {
+		flag |= C.kCGEventFlagMaskCommand
+	}
+	if cli.shiftDown {
+		flag |= C.kCGEventFlagMaskShift
+	}
+	if flag != 0 {
+		C.CGEventSetFlags(event, C.CGEventFlags(flag))
+	}
+
+	C.CGEventPost(C.kCGSessionEventTap, event)
+
+	switch key {
+	case "cmd":
+		cli.cmdDown = down
+	case "alt":
+		cli.altDown = down
+	case "control":
+		cli.ctrlDown = down
+	case "shift":
+		cli.shiftDown = down
+	}
+
+	time.Sleep(0)
 	return nil
 }
 

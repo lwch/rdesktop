@@ -8,8 +8,8 @@ func TestKeyboardInput(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer cli.Close()
-	cli.ToggleKey("control", true)
+	cli.ToggleKey("cmd", true)
 	cli.ToggleKey("a", true)
-	cli.ToggleKey("control", false)
+	cli.ToggleKey("cmd", false)
 	cli.ToggleKey("a", false)
 }
