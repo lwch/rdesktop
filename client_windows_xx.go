@@ -51,7 +51,7 @@ func (cli *osBase) getHandle() error {
 	return nil
 }
 
-func (cli *osBase) size() (image.Point, error) {
+func (cli *osBase) Size() (image.Point, error) {
 	err := cli.getHandle()
 	if err != nil {
 		return image.Point{}, err
