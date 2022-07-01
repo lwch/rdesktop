@@ -28,7 +28,7 @@ func (cli *osBase) Close() {
 	}
 }
 
-func (cli *osBase) size() (image.Point, error) {
+func (cli *osBase) Size() (image.Point, error) {
 	return cli.cli.GetSize()
 }
 

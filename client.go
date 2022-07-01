@@ -35,7 +35,7 @@ func New() (*Client, error) {
 	if err != nil {
 		return nil, err
 	}
-	size, err := cli.size()
+	size, err := cli.Size()
 	if err != nil {
 		cli.Close()
 		return nil, err
@@ -47,7 +47,7 @@ func New() (*Client, error) {
 
 // Screenshot screenshot
 func (cli *Client) Screenshot() (*image.RGBA, error) {
-	size, err := cli.size()
+	size, err := cli.Size()
 	if err != nil {
 		return nil, err
 	}

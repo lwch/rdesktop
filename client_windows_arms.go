@@ -12,7 +12,7 @@ func (cli *osBase) init() error {
 	return ErrUnsupported
 }
 
-func (cli *osBase) size() (image.Point, error) {
+func (cli *osBase) Size() (image.Point, error) {
 	return image.Point{}, ErrUnsupported
 }
 
