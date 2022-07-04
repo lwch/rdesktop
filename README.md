@@ -17,7 +17,7 @@ supported system
 
 - [x] linux(x11)
 - [x] windows
-- [ ] macos
+- [x] macos
 
 ## screenshot
 
