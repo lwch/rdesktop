@@ -79,7 +79,7 @@ func (cli *Client) screenshot(img *image.RGBA) error {
 			return errors.New("not supported bits")
 		}
 		copy(src.Pix, C.GoBytes(ptr, C.int(len(src.Pix))))
-		draw.ApproxBiLinear.Scale(img, img.Bounds(), src, src.Bounds(), draw.Over, nil)
+		draw.NearestNeighbor.Scale(img, img.Bounds(), src, src.Bounds(), draw.Over, nil)
 	}
 	// BGR => RGB
 	for i := 0; i < len(img.Pix); i += 4 {
