@@ -3,7 +3,6 @@ package x11
 import (
 	"bytes"
 	"encoding/binary"
-	"encoding/hex"
 	"errors"
 	"fmt"
 	"io"
@@ -146,7 +145,6 @@ func (cli *Client) queryExtension(name string) (bool, byte, error) {
 func errCheck(data []byte) error {
 	// TODO error parse
 	if data[0] == 0 {
-		logging.Error("error:\n%s", hex.Dump(data))
 		return errors.New("error occurred")
 	}
 	return nil
