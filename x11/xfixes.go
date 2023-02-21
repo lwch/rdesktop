@@ -78,10 +78,10 @@ func (cli *Client) GetCursor() (*image.RGBA, error) {
 	offset := 0
 	for dy := 0; dy < int(height); dy++ {
 		for dx := 0; dx < int(width); dx++ {
-			if ret[offset+3] > 0 { // a
-				img.Pix[offset+2] = ret[offset]   // b
-				img.Pix[offset+1] = ret[offset+1] // g
-				img.Pix[offset] = ret[offset+2]   // r
+			if ret[offset+32+3] > 0 { // a
+				img.Pix[offset+2] = ret[offset+32]   // b
+				img.Pix[offset+1] = ret[offset+32+1] // g
+				img.Pix[offset] = ret[offset+32+2]   // r
 			}
 			offset += 4
 		}
