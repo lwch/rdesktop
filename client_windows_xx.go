@@ -119,7 +119,7 @@ func (cli *Client) screenshot(img *image.RGBA) error {
 }
 
 // GetCursor get cursor image
-func (cli *osBase) GetCursor() (*imag.RGBA, error) {
+func (cli *osBase) GetCursor() (*image.RGBA, error) {
 	return nil, ErrUnsupported
 }
 
