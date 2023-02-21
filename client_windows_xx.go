@@ -118,6 +118,11 @@ func (cli *Client) screenshot(img *image.RGBA) error {
 	return nil
 }
 
+// GetCursor get cursor image
+func (cli *osBase) GetCursor() (*imag.RGBA, error) {
+	return nil, ErrUnsupported
+}
+
 func (cli *osBase) bitblt(width, height int) (uintptr, uintptr, func(), error) {
 	memDC, _, err := syscall.Syscall(windef.FuncCreateCompatibleDC, 1, cli.hdc, 0, 0)
 	if memDC == 0 {

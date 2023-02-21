@@ -88,6 +88,10 @@ func (cli *Client) screenshot(img *image.RGBA) error {
 	return nil
 }
 
+func (cli *osBase) GetCursor() (*image.RGBA, error) {
+	return nil, ErrUnsupported
+}
+
 // MouseMove move mouse to x,y
 func (cli *osBase) MouseMove(x, y int) error {
 	pt := C.CGPointMake(C.double(x), C.double(y))

@@ -23,6 +23,11 @@ func (cli *Client) screenshot(img *image.RGBA) error {
 	return ErrUnsupported
 }
 
+// GetCursor get cursor image
+func (cli *Client) GetCursor() (*image.RGBA, error) {
+	return nil, ErrUnsupported
+}
+
 // MouseMove move mouse to x,y
 func (cli *osBase) MouseMove(x, y int) error {
 	return ErrUnsupported
