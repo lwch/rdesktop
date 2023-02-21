@@ -2,6 +2,7 @@ package rdesktop
 
 import (
 	"image/jpeg"
+	"image/png"
 	"os"
 	"testing"
 )
@@ -38,12 +39,12 @@ func TestGetCursor(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	f, err := os.Create("cursor.jpg")
+	f, err := os.Create("cursor.png")
 	if err != nil {
 		t.Fatal(err)
 	}
 	defer f.Close()
-	err = jpeg.Encode(f, img, nil)
+	err = png.Encode(f, img)
 	if err != nil {
 		t.Fatal(err)
 	}
