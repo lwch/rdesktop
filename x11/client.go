@@ -15,6 +15,35 @@ import (
 	"github.com/lwch/logging"
 )
 
+type status byte
+type code byte
+
+const (
+	statusFailed status = iota
+	statusOK
+)
+
+// https://www.x.org/releases/X11R7.6/doc/xproto/x11protocol.html#errors_encoding
+const (
+	codeErrRequest code = iota + 1
+	codeErrValue
+	codeErrWindow
+	codeErrPixmap
+	codeErrAtom
+	codeErrCursor
+	codeErrFont
+	codeErrMatch
+	codeErrDrawable
+	codeErrAccess
+	codeErrAlloc
+	codeErrColormap
+	codeErrGContext
+	codeErrIDChoice
+	codeErrName
+	codeErrLength
+	codeErrImplementation
+)
+
 // Client x11 client
 type Client struct {
 	callLock   sync.Mutex
@@ -142,10 +171,72 @@ func (cli *Client) queryExtension(name string) (bool, byte, error) {
 	return data[8] != 0, data[9], nil
 }
 
+var errBadRequest = errors.New("bad request")
+var errBadMatch = errors.New("bad match")
+var errAccess = errors.New("access denied")
+var errAlloc = errors.New("alloc failed")
+var errBadName = errors.New("bad name")
+var errLength = errors.New("length error")
+var errImplementation = errors.New("implementation error")
+
+// https://www.x.org/releases/X11R7.6/doc/xproto/x11protocol.html#errors_encoding
 func errCheck(data []byte) error {
-	// TODO error parse
-	if data[0] == 0 {
-		return errors.New("error occurred")
+	var hdr struct {
+		Status status
+		Code   code
+		Seq    uint16
+	}
+	err := binary.Read(bytes.NewReader(data), binary.BigEndian, &hdr)
+	if err != nil {
+		return err
+	}
+	if hdr.Status == statusFailed {
+		switch hdr.Code {
+		case codeErrRequest:
+			return errBadRequest
+		case codeErrValue:
+			value := binary.BigEndian.Uint32(data[4:])
+			return fmt.Errorf("bad value: %d", value)
+		case codeErrWindow:
+			value := binary.BigEndian.Uint32(data[4:])
+			return fmt.Errorf("bad window: %d", value)
+		case codeErrPixmap:
+			value := binary.BigEndian.Uint32(data[4:])
+			return fmt.Errorf("bad pixmap: %d", value)
+		case codeErrAtom:
+			value := binary.BigEndian.Uint32(data[4:])
+			return fmt.Errorf("bad atom: %d", value)
+		case codeErrCursor:
+			value := binary.BigEndian.Uint32(data[4:])
+			return fmt.Errorf("bad cursor: %d", value)
+		case codeErrFont:
+			value := binary.BigEndian.Uint32(data[4:])
+			return fmt.Errorf("bad font: %d", value)
+		case codeErrMatch:
+			return errBadMatch
+		case codeErrDrawable:
+			value := binary.BigEndian.Uint32(data[4:])
+			return fmt.Errorf("bad drawable: %d", value)
+		case codeErrAccess:
+			return errAccess
+		case codeErrAlloc:
+			return errAlloc
+		case codeErrColormap:
+			value := binary.BigEndian.Uint32(data[4:])
+			return fmt.Errorf("bad colormap: %d", value)
+		case codeErrGContext:
+			value := binary.BigEndian.Uint32(data[4:])
+			return fmt.Errorf("bad gcontext: %d", value)
+		case codeErrIDChoice:
+			value := binary.BigEndian.Uint32(data[4:])
+			return fmt.Errorf("bad id choice: %d", value)
+		case codeErrName:
+			return errBadName
+		case codeErrLength:
+			return errLength
+		case codeErrImplementation:
+			return errImplementation
+		}
 	}
 	return nil
 }
