@@ -20,6 +20,8 @@ var (
 	FuncBitBlt, _ = syscall.GetProcAddress(syscall.Handle(libGdi32), "BitBlt")
 	// FuncGetDIBits https://docs.microsoft.com/en-us/windows/win32/api/wingdi/nf-wingdi-getdibits
 	FuncGetDIBits, _ = syscall.GetProcAddress(syscall.Handle(libGdi32), "GetDIBits")
+	// FuncGetObject https://learn.microsoft.com/en-us/windows/win32/api/wingdi/nf-wingdi-getobject
+	FuncGetObject, _ = syscall.GetProcAddress(syscall.Handle(libGdi32), "GetObjectW")
 )
 
 const (
@@ -42,3 +44,13 @@ const (
 	// DIBRGBCOLORS https://docs.microsoft.com/en-us/windows/win32/api/wingdi/nf-wingdi-getdibits
 	DIBRGBCOLORS = 0
 )
+
+type BITMAP struct {
+	BmType       LONG
+	BmWidth      LONG
+	BmHeight     LONG
+	BmWidthBytes LONG
+	BmPlanes     WORD
+	BmBitsPixel  WORD
+	BmPixel      LPVOID
+}

@@ -120,7 +120,54 @@ func (cli *Client) screenshot(img *image.RGBA) error {
 
 // GetCursor get cursor image
 func (cli *osBase) GetCursor() (*image.RGBA, error) {
-	return nil, ErrUnsupported
+	var curInfo windef.CURSORINFO
+	curInfo.CbSize = windef.DWORD(unsafe.Sizeof(curInfo))
+	ok, _, err := syscall.SyscallN(windef.FuncGetCursorInfo, uintptr(unsafe.Pointer(&curInfo)), 0, 0)
+	if ok == 0 {
+		return nil, fmt.Errorf("get cursor info: %v", err)
+	}
+	var info windef.ICONINFO
+	ok, _, err = syscall.SyscallN(windef.FuncGetIconInfo, uintptr(curInfo.HCursor), uintptr(unsafe.Pointer(&info)), 0)
+	if ok == 0 {
+		return nil, fmt.Errorf("get icon info: %v", err)
+	}
+
+	var bitmap windef.BITMAP
+	ok, _, err = syscall.SyscallN(windef.FuncGetObject, uintptr(info.HbmMask), unsafe.Sizeof(bitmap), uintptr(unsafe.Pointer(&bitmap)))
+	if ok == 0 {
+		return nil, fmt.Errorf("get object: %v", err)
+	}
+
+	defer syscall.SyscallN(windef.FuncDeleteObject, uintptr(info.HbmColor))
+	defer syscall.SyscallN(windef.FuncDeleteObject, uintptr(info.HbmMask))
+
+	hdcMem, _, err := syscall.SyscallN(windef.FuncCreateCompatibleDC, cli.hdc)
+	if hdcMem == 0 {
+		return nil, fmt.Errorf("create compatible dc: %v", err)
+	}
+	defer syscall.SyscallN(windef.FuncDeleteDC, hdcMem)
+	canvas, _, err := syscall.SyscallN(windef.FuncCreateCompatibleBitmap, cli.hdc,
+		uintptr(bitmap.BmWidth), uintptr(bitmap.BmHeight))
+	if canvas == 0 {
+		return nil, fmt.Errorf("create compatible bitmap: %v", err)
+	}
+	defer syscall.SyscallN(windef.FuncDeleteObject, canvas)
+
+	old, _, err := syscall.SyscallN(windef.FuncSelectObject, hdcMem, canvas)
+	if old == 0 {
+		return nil, fmt.Errorf("select object: %v", err)
+	}
+	defer syscall.SyscallN(windef.FuncSelectObject, hdcMem, old)
+
+	img := image.NewRGBA(image.Rect(0, 0, int(bitmap.BmWidth), int(bitmap.BmHeight)))
+	defer cli.copyImageData(cli.hdc, canvas, img)
+
+	ok, _, err = syscall.SyscallN(windef.FuncDrawIcon, hdcMem, 0, 0, uintptr(curInfo.HCursor))
+	if ok == 0 {
+		return nil, fmt.Errorf("draw icon: %v", err)
+	}
+
+	return img, nil
 }
 
 func (cli *osBase) bitblt(width, height int) (uintptr, uintptr, func(), error) {
