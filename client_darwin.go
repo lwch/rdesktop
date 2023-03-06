@@ -11,13 +11,10 @@ CGEventRef createWheelEvent(int x, int y) {
 import "C"
 
 import (
-	"errors"
 	"fmt"
 	"image"
 	"time"
 	"unsafe"
-
-	"golang.org/x/image/draw"
 )
 
 type osBase struct {
@@ -66,11 +63,7 @@ func (cli *Client) screenshot(img *image.RGBA) error {
 	display := C.CGDisplayCreateImage(cli.id)
 	defer C.CFRelease(C.CFTypeRef(display))
 	raw := C.CGDataProviderCopyData(C.CGImageGetDataProvider(display))
-	bits := C.CGImageGetBitsPerPixel(display)
-	width := C.CGImageGetWidth(display)
-	height := C.CGImageGetHeight(display)
 	ptr := unsafe.Pointer(C.CFDataGetBytePtr(raw))
-	size := img.Bounds()
 	copy(img.Pix, C.GoBytes(ptr, C.int(len(img.Pix))))
 	// BGR => RGB
 	for i := 0; i < len(img.Pix); i += 4 {
@@ -80,7 +73,7 @@ func (cli *Client) screenshot(img *image.RGBA) error {
 }
 
 func (cli *osBase) GetCursor() (*image.RGBA, error) {
-	var dx, dy C.uint32_t
+	var dx, dy C.int
 	C.CGGetLastMouseDelta(&dx, &dy)
 	fmt.Println("mouse: %d, %d", dx, dy)
 	return nil, ErrUnsupported
