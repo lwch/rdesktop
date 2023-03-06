@@ -89,6 +89,9 @@ func (cli *Client) screenshot(img *image.RGBA) error {
 }
 
 func (cli *osBase) GetCursor() (*image.RGBA, error) {
+	var dx, dy C.uint32_t
+	C.CGGetLastMouseDelta(&dx, &dy)
+	fmt.Println("mouse: %d, %d", dx, dy)
 	return nil, ErrUnsupported
 }
 
