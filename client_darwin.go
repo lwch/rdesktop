@@ -47,10 +47,13 @@ func getDisplayID() C.CGDirectDisplayID {
 }
 
 func (cli *osBase) Size() (image.Point, error) {
-	rect := C.CGDisplayBounds(cli.id)
+	display := C.CGDisplayCreateImage(cli.id)
+	defer C.CFRelease(C.CFTypeRef(display))
+	width := C.CGImageGetWidth(display)
+	height := C.CGImageGetHeight(display)
 	return image.Point{
-		X: int(rect.size.width),
-		Y: int(rect.size.height),
+		X: int(width),
+		Y: int(height),
 	}, nil
 }
 
@@ -68,19 +71,7 @@ func (cli *Client) screenshot(img *image.RGBA) error {
 	height := C.CGImageGetHeight(display)
 	ptr := unsafe.Pointer(C.CFDataGetBytePtr(raw))
 	size := img.Bounds()
-	if size.Dx() == int(width) && size.Dy() == int(height) {
-		copy(img.Pix, C.GoBytes(ptr, C.int(len(img.Pix))))
-	} else {
-		var src *image.RGBA
-		switch bits {
-		case 32:
-			src = image.NewRGBA(image.Rect(0, 0, int(width), int(height)))
-		default:
-			return errors.New("not supported bits")
-		}
-		copy(src.Pix, C.GoBytes(ptr, C.int(len(src.Pix))))
-		draw.NearestNeighbor.Scale(img, img.Bounds(), src, src.Bounds(), draw.Over, nil)
-	}
+	copy(img.Pix, C.GoBytes(ptr, C.int(len(img.Pix))))
 	// BGR => RGB
 	for i := 0; i < len(img.Pix); i += 4 {
 		img.Pix[i], img.Pix[i+2] = img.Pix[i+2], img.Pix[i]
