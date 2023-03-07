@@ -47,3 +47,9 @@ supported system
     cli, _ := rdesktop.New()
     cli.ClipboardSet("hello") // set "hello" text to clipboard
     data, _ := cli.ClipboardGet() // get clipboard data
+
+## cursor image
+
+    cli, _ := rdesktop.New()
+    img, err := cli.GetCursor()
+    // use of img
