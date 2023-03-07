@@ -7,6 +7,9 @@ package rdesktop
 CGEventRef createWheelEvent(int x, int y) {
 	return CGEventCreateScrollWheelEvent(NULL, kCGScrollEventUnitPixel, 2, y, x);
 }
+
+void get_cursor_size(int *width, int *height);
+void cursor_copy(unsigned char* pixels, int width, int height);
 */
 import "C"
 
@@ -73,10 +76,14 @@ func (cli *Client) screenshot(img *image.RGBA) error {
 }
 
 func (cli *osBase) GetCursor() (*image.RGBA, error) {
-	var dx, dy C.int
-	C.CGGetLastMouseDelta(&dx, &dy)
-	fmt.Printf("mouse: %d, %d", dx, dy)
-	return nil, ErrUnsupported
+	var width, height C.int
+	C.get_cursor_size(&width, &height)
+	if width == 0 || height == 0 {
+		return nil, fmt.Errorf("can not get cursor size")
+	}
+	img := image.NewRGBA(image.Rect(0, 0, int(width), int(height)))
+	C.cursor_copy((*C.uchar)(unsafe.Pointer(&img.Pix[0])), width, height)
+	return img, nil
 }
 
 // MouseMove move mouse to x,y
