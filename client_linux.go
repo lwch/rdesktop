@@ -43,6 +43,7 @@ func (cli *Client) screenshot(img *image.RGBA) error {
 	return nil
 }
 
+// GetCursor get cursor image
 func (cli *Client) GetCursor() (*image.RGBA, error) {
 	return cli.cli.GetCursor()
 }

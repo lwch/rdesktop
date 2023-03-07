@@ -75,6 +75,7 @@ func (cli *Client) screenshot(img *image.RGBA) error {
 	return nil
 }
 
+// GetCursor get cursor image
 func (cli *osBase) GetCursor() (*image.RGBA, error) {
 	var width, height C.int
 	C.get_cursor_size(&width, &height)
