@@ -38,9 +38,14 @@ func (cli *Client) screenshot(img *image.RGBA) error {
 		return err
 	}
 	if cli.showCursor {
-		cli.cli.GetCursorImage(img)
+		cli.cli.DrawCursor(img)
 	}
 	return nil
+}
+
+// GetCursor get cursor image
+func (cli *Client) GetCursor() (*image.RGBA, error) {
+	return cli.cli.GetCursor()
 }
 
 // MouseMove move mouse to x,y

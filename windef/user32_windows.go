@@ -25,6 +25,8 @@ type (
 	HANDLE uintptr
 	// BOOL bool
 	BOOL int32
+	// WORD word
+	WORD uint16
 	// DWORD double word
 	DWORD uint32
 	// LONG long
@@ -33,6 +35,8 @@ type (
 	HCURSOR HANDLE
 	// HBITMAP bitmap handle
 	HBITMAP HANDLE
+	// LPVOID pointer to void
+	LPVOID uintptr
 )
 
 // POINT pointer
