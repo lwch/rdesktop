@@ -10,7 +10,7 @@ void get_cursor_size(int *width, int *height) {
     *height = size.height;
 }
 
-void cursor_copy(unsigned char* pixels, int width, int height) {
+void cursor_copy(unsigned char *pixels, int width, int height) {
     NSCursor *cursor = [NSCursor currentSystemCursor];
     NSImage *image = [cursor image];
     NSSize size = [image size];
@@ -31,3 +31,26 @@ void cursor_copy(unsigned char* pixels, int width, int height) {
     }
 }
 
+void screenshot(unsigned char *pixels, int width, int height, bool show_cursor) {
+    CGImageRef screenshot = nil;
+    if (show_cursor) {
+        screenshot = CGWindowListCreateImage(CGRectInfinite, kCGWindowListOptionOnScreenOnly, kCGNullWindowID, kCGWindowImageDefault);
+    } else {
+        screenshot = CGDisplayCreateImage(kCGDirectMainDisplay);
+    }
+    NSBitmapImageRep *bitmap = [[[NSBitmapImageRep alloc] initWithCGImage:screenshot] autorelease];
+    NSSize size = [bitmap size];
+    for (int y = 0; y < height; y++) {
+        if (y > size.height)
+            break;
+        for (int x = 0; x < width; x++) {
+            if (x > size.width)
+                break;
+            NSColor *color = [bitmap colorAtX:x y:y];
+            pixels[y * width * 4 + x * 4 + 0] = [color redComponent] * 255;
+            pixels[y * width * 4 + x * 4 + 1] = [color greenComponent] * 255;
+            pixels[y * width * 4 + x * 4 + 2] = [color blueComponent] * 255;
+            pixels[y * width * 4 + x * 4 + 3] = [color alphaComponent] * 255;
+        }
+    }
+}

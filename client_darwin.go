@@ -10,6 +10,7 @@ CGEventRef createWheelEvent(int x, int y) {
 
 void get_cursor_size(int *width, int *height);
 void cursor_copy(unsigned char* pixels, int width, int height);
+void screenshot(unsigned char *pixels, int width, int height, bool show_cursor);
 */
 import "C"
 
@@ -58,20 +59,7 @@ func (cli *osBase) Size() (image.Point, error) {
 }
 
 func (cli *Client) screenshot(img *image.RGBA) error {
-	if cli.showCursor {
-		C.CGDisplayShowCursor(cli.id)
-	} else {
-		C.CGDisplayHideCursor(cli.id)
-	}
-	display := C.CGDisplayCreateImage(cli.id)
-	defer C.CFRelease(C.CFTypeRef(display))
-	raw := C.CGDataProviderCopyData(C.CGImageGetDataProvider(display))
-	ptr := unsafe.Pointer(C.CFDataGetBytePtr(raw))
-	copy(img.Pix, C.GoBytes(ptr, C.int(len(img.Pix))))
-	// BGR => RGB
-	for i := 0; i < len(img.Pix); i += 4 {
-		img.Pix[i], img.Pix[i+2] = img.Pix[i+2], img.Pix[i]
-	}
+	C.screenshot((*C.uchar)(unsafe.Pointer(&img.Pix[0])), C.int(img.Rect.Dx()), C.int(img.Rect.Dy()), C.bool(cli.showCursor))
 	return nil
 }
 
