@@ -1,7 +1,7 @@
 package rdesktop
 
 /*
-#cgo LDFLAGS: -framework CoreGraphics -framework CoreFoundation
+#cgo LDFLAGS: -framework CoreGraphics -framework CoreFoundation -framework AppKit
 #include <CoreGraphics/CoreGraphics.h>
 
 CGEventRef createWheelEvent(int x, int y) {
